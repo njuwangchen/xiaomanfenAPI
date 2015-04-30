@@ -1,0 +1,10 @@
+flask
+flask-SQLAlchemy
+flask-Migrate
+mysql-python
+flask-restful
+flask-cors
+python-dateutil
+itsdangerous
+passlib
+requests
