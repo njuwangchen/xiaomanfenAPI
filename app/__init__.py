@@ -8,7 +8,7 @@ app = Flask(__name__)
 app.config.from_object('config')
 
 db = SQLAlchemy(app)
-cor = CORS(app, allow_headers='Content-Type')
+cor = CORS(app, allow_headers='*')
 api = Api(app)
 
 from app import models
