@@ -103,6 +103,18 @@ def ipn():
         # Do something with the verified transaction details.
         payer_email =  request.form.get('payer_email')
         print "Pulled {email} from transaction".format(email=payer_email)
+        payment_status = request.form.get('payment_status')
+        if payment_status == 'Completed':
+            receiver_email = request.form.get('receiver_email')
+            if receiver_email == 'wangchenclark-facilitator@foxmail.com':
+                mc_gross = float(request.form.get('mc_gross'))
+                mc_currency = request.form.get('mc_currency')
+                if mc_gross == 100 and mc_currency == 'USD':
+                    #检验已经完成，可以更新订单状态了
+                    order_id = int(request.form.get('item_number'))
+                    order = Order.query.get(order_id)
+                    order.status = 1
+                    db.session.commit()
     else:
         print 'Paypal IPN string {arg} did not validate'.format(arg=arg)
 
