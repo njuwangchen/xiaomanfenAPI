@@ -5,6 +5,7 @@ from models import User
 from flask.ext.restful import reqparse, abort, Resource, fields, marshal_with
 from flask import request
 import requests
+import json
 
 login_fields = {
     "isSucceed": fields.Boolean,
@@ -40,7 +41,7 @@ class LoginApi(Resource):
         captcha_payload[u'remoteip'] = request.remote_addr
         print(captcha_payload)
 
-        r = requests.post('https://www.google.com/recaptcha/api/siteverify', params=captcha_payload)
+        r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=json.dumps(captcha_payload))
         r = r.json()
         print(r)
         user = User.query.filter_by(email=args['email']).first()
