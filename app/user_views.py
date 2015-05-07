@@ -42,7 +42,7 @@ class LoginApi(Resource):
 
         payload = {'secret': app.config['RECAPTCHA_KEY'], 'response': args['captcha']['response'], 'remoteip': request.remote_addr}
         print(payload)
-        r = requests.post('https://www.google.com/recaptcha/api/siteverify', params=payload)
+        r = requests.get('https://www.google.com/recaptcha/api/siteverify', params=payload)
         r = r.json()
         print(r)
         user = User.query.filter_by(email=args['email']).first()
