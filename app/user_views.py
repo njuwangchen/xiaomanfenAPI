@@ -1,8 +1,10 @@
 __author__ = 'ClarkWong'
 
-from app import db, api
+from app import db, api, app
 from models import User
 from flask.ext.restful import reqparse, abort, Resource, fields, marshal_with
+from flask import request
+import requests
 
 login_fields = {
     "isSucceed": fields.Boolean,
@@ -24,12 +26,22 @@ class LoginApi(Resource):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('email', type=unicode, required=True, location='json')
         self.parser.add_argument('password', type=unicode, required=True, location='json')
+        self.parser.add_argument('captcha', type=dict, required=True, location='json')
         super(LoginApi, self).__init__()
 
     @marshal_with(login_fields)
     def post(self):
         result = dict()
         args = self.parser.parse_args()
+
+        captcha_payload = dict()
+        captcha_payload['response'] = args['captcha']['response']
+        captcha_payload['secret'] = app.config['RECAPTCHA_KEY']
+        captcha_payload['remoteip'] = request.remote_addr
+
+        r = requests.post('https://www.google.com/recaptcha/api/siteverify', params=captcha_payload)
+        r = r.json()
+        print(r)
         user = User.query.filter_by(email=args['email']).first()
         if not user:
             result['isSucceed'] = False
