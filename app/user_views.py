@@ -35,12 +35,12 @@ class LoginApi(Resource):
         args = self.parser.parse_args()
 
         captcha_payload = dict()
-        captcha_payload['response'] = args['captcha']['response']
-        captcha_payload['secret'] = app.config['RECAPTCHA_KEY']
-        captcha_payload['remoteip'] = request.remote_addr
+        captcha_payload[u'response'] = args['captcha']['response']
+        captcha_payload[u'secret'] = app.config['RECAPTCHA_KEY']
+        captcha_payload[u'remoteip'] = request.remote_addr
         print(captcha_payload)
 
-        r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=captcha_payload)
+        r = requests.post('https://www.google.com/recaptcha/api/siteverify', params=captcha_payload)
         r = r.json()
         print(r)
         user = User.query.filter_by(email=args['email']).first()
