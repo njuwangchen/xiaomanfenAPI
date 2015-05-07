@@ -98,6 +98,7 @@ def get_code():
     code_img.save(buf,'JPEG',quality=70)
 
     buf_str = buf.getvalue()
+    buf_str = buf_str.encode('base64')
     response = app.make_response(buf_str)
     response.headers['Content-Type'] = 'image/jpeg'
     return response
