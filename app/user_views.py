@@ -40,10 +40,7 @@ class LoginApi(Resource):
         captcha_payload['secret'] = app.config['RECAPTCHA_KEY']
         captcha_payload['remoteip'] = request.remote_addr
 
-        payload = json.dumps(captcha_payload)
-        print(payload)
-
-        r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=json.dumps(payload))
+        r = requests.post('https://www.google.com/recaptcha/api/siteverify', params=captcha_payload)
         r = r.json()
         print(r)
         user = User.query.filter_by(email=args['email']).first()
