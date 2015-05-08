@@ -10,7 +10,8 @@ from werkzeug.datastructures import ImmutableOrderedMultiDict
 
 order_operation_result_fields = {
     "isSucceed": fields.Boolean,
-    "order_id": fields.Integer
+    "order_id": fields.Integer,
+    "type": fields.Integer
 }
 
 order_fields = {
@@ -56,6 +57,7 @@ class OrderApi(Resource):
             db.session.commit()
             result['isSucceed'] = True
             result['order_id'] = order.id
+            result['type'] = order.type
             return result, 201
         else:
             result['isSucceed'] = False
