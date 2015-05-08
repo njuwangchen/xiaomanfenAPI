@@ -112,9 +112,10 @@ def ipn():
         if payment_status == 'Completed':
             receiver_email = request.form.get('receiver_email')
             if receiver_email == 'wangchenclark-facilitator@foxmail.com':
+                item_name = request.form.get('item_name')
                 mc_gross = float(request.form.get('mc_gross'))
                 mc_currency = request.form.get('mc_currency')
-                if mc_gross == 100 and mc_currency == 'USD':
+                if (item_name == 'xiao man fen smart glass' and mc_gross == 129 and mc_currency == 'USD') or (item_name == 'xiao man fen smart glass and earphone set' and mc_gross == 149 and mc_currency == 'USD'):
                     #检验已经完成，可以更新订单状态了
                     order_id = int(request.form.get('item_number'))
                     order = Order.query.get(order_id)
