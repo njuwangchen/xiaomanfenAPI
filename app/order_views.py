@@ -52,7 +52,7 @@ class OrderApi(Resource):
         result = {}
         if user:
             order_time = datetime.now()
-            order = Order(order_time, args['tel'], args['address_line_1'], args['city'], args['state'], args['country'], args['zipcode'], args['orderer_name'], user.id, args['address_line_2'], 0)
+            order = Order(order_time, args['tel'], args['address_line_1'], args['city'], args['state'], args['country'], args['zipcode'], args['orderer_name'], user.id, args['address_line_2'], 0, args['type'])
             db.session.add(order)
             db.session.commit()
             result['isSucceed'] = True
