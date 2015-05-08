@@ -16,6 +16,7 @@ order_operation_result_fields = {
 order_fields = {
     "id": fields.Integer,
     "order_time": fields.String,
+    "status": fields.Integer,
     "status_str": fields.String,
     "tel": fields.String,
     "address_line_1": fields.String,
@@ -24,7 +25,8 @@ order_fields = {
     "state": fields.String,
     "country": fields.String,
     "zipcode": fields.String,
-    "orderer_name": fields.String
+    "orderer_name": fields.String,
+    "type": fields.Integer
 }
 
 class OrderApi(Resource):
@@ -39,6 +41,7 @@ class OrderApi(Resource):
         self.parser.add_argument('country', type=unicode, required=True, location='json')
         self.parser.add_argument('zipcode', type=unicode, required=True, location='json')
         self.parser.add_argument('orderer_name', type=unicode, required=True, location='json')
+        self.parser.add_argument('type', type=unicode, required=True, location='json')
         super(OrderApi, self).__init__()
 
     @marshal_with(order_operation_result_fields)

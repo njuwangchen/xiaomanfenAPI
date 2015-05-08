@@ -89,32 +89,5 @@ class RegisterApi(Resource):
 
         return result, 201
 
-# class RegisterApi(Resource):
-#     def __init__(self):
-#         self.parser = reqparse.RequestParser()
-#         self.parser.add_argument('email', type=unicode, required=True, location='json')
-#         self.parser.add_argument('password', type=unicode, reqparse=True, location='json')
-#         super(RegisterApi, self).__init__()
-#
-#     @marshal_with(register_fields)
-#     def post(self):
-#         result = dict()
-#         args = self.parser.parse_args()
-#         user = User.query.filter_by(email=args['email']).first()
-#         if user:
-#             result['isSucceed'] = False
-#             result['emailExist'] = True
-#         else:
-#             user = User(args['email'], args['password'])
-#             db.session.add(user)
-#             db.session.commit()
-#             result['isSucceed'] = True
-#             result['loginEmail'] = user.email
-#             result['token'] = user.generate_auth_token()
-#
-#         return result, 201
-#
-
 api.add_resource(LoginApi, '/api/v1/login', endpoint='login')
 api.add_resource(RegisterApi, '/api/v1/register', endpoint='register')
-# api.add_resource(RegisterApi, '/api/v1/register', endpoint='register')

@@ -51,7 +51,10 @@ class Order(db.Model):
     orderer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     orderer = db.relationship('User', backref=db.backref('orders', lazy='dynamic'))
 
-    def __init__(self, order_time, tel, address_line_1, city, state, country, zipcode, orderer_name, orderer_id, address_line_2='', status=0):
+    #order type, 0 for only glass, 1 for glass and earphone
+    type = db.Column(db.Integer, nullable=False)
+
+    def __init__(self, order_time, tel, address_line_1, city, state, country, zipcode, orderer_name, orderer_id, address_line_2='', status=0, type=0):
         self.order_time = order_time
         self.tel = tel
         self.address_line_1 = address_line_1
@@ -63,4 +66,5 @@ class Order(db.Model):
         self.orderer_id = orderer_id
         self.status = status
         self.address_line_2 = address_line_2
+        self.type = type
 
