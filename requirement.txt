@@ -9,3 +9,5 @@ itsdangerous
 passlib
 requests
 pillow
+Flask-Session
+redis
