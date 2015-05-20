@@ -4,7 +4,7 @@ from app import db, api, app
 from models import Order, User
 from flask.ext.restful import reqparse, abort, Resource, fields, marshal_with
 from datetime import datetime
-from flask import request
+from flask import request, session
 import requests
 from werkzeug.datastructures import ImmutableOrderedMultiDict
 
@@ -12,6 +12,11 @@ order_operation_result_fields = {
     "isSucceed": fields.Boolean,
     "order_id": fields.Integer,
     "type": fields.Integer
+}
+
+order_check_fields = {
+    "order_id": fields.Integer,
+    "status": fields.Boolean
 }
 
 order_fields = {
@@ -58,10 +63,51 @@ class OrderApi(Resource):
             result['isSucceed'] = True
             result['order_id'] = order.id
             result['type'] = order.type
+            # session['order_id'] = order.id
             return result, 201
         else:
             result['isSucceed'] = False
             return result, 201
+
+    # @marshal_with(order_check_fields)
+    # def put(self):
+    #     id
+    #     result = {}
+    #     if id:
+    #         order = Order.query.get(id)
+    #         result['hasSession'] = True
+    #         result['order_id'] = order.id
+    #         if order.status == 0:
+    #             result['status'] = False
+    #         else:
+    #             result['status'] = True
+    #         return result, 201
+    #     else:
+    #         result['hasSession'] = False
+    #         result['status'] = False
+    #         return result, 201
+class OrderCheckApi(Resource):
+    def __init__(self):
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('order_id', type=int, required=True, location='json')
+        super(OrderCheckApi, self).__init__()
+
+    @marshal_with(order_check_fields)
+    def post(self):
+        args = self.parser.parse_args()
+        id = args['order_id']
+        result = {}
+        order = Order.query.get(id)
+        if order:
+            result['order_id'] = id
+            if order.status == 1:
+                result['status'] = True
+            else:
+                result['status'] = False
+            return result, 201
+        else:
+            abort(400)
+
 
 class OrderListApi(Resource):
     def __init__(self):
@@ -128,6 +174,7 @@ def ipn():
 
 api.add_resource(OrderApi, '/api/v1/order', endpoint='order')
 api.add_resource(OrderListApi, '/api/v1/orders', endpoint='orders')
+api.add_resource(OrderCheckApi, '/api/v1/orders/check', endpoint='orders_check')
 
 
 
